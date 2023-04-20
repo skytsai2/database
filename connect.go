@@ -19,20 +19,18 @@ const (
 	MaxIdleConns int    = 10
 )
 
-func init() {
-	fmt.Print("connect")
-}
-
-func connect() {
+func connect() *sql.DB {
 	//組合sql連線字串
 	conn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", UserName, Password, Addr, Port, Database)
 	//連接MySQL
 	DB, err := sql.Open("mysql", conn)
 	if err != nil {
 		fmt.Println("connection to mysql failed:", err)
-		return
+		return DB
 	}
 	DB.SetConnMaxLifetime(time.Duration(MaxLifetime) * time.Second)
 	DB.SetMaxOpenConns(MaxOpenConns)
 	DB.SetMaxIdleConns(MaxIdleConns)
+
+	return DB
 }
